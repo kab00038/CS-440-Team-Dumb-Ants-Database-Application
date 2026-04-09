@@ -39,13 +39,13 @@ def _render_home() -> None:
     c1, c2, c3 = st.columns(3)
 
     with c1:
-        if st.button("Inventory", use_container_width=True):
+        if st.button("Inventory", width='stretch'):
             _go_to("inventory")
     with c2:
-        if st.button("Analytics", use_container_width=True):
+        if st.button("Analytics", width='stretch'):
             _go_to("analytics")
     with c3:
-        if st.button("Operations", use_container_width=True):
+        if st.button("Operations", width='stretch'):
             _go_to("operations")
 
     st.markdown("### Active Devices")
@@ -55,7 +55,7 @@ def _render_home() -> None:
         columns=["Asset ID", "Hostname", "Device Type", "Form Factor"]
         #Device type is network vs server vs workstation. Form factor is laptop vs desktop vs rackmount, etc.
     )
-    st.dataframe(empty_table, use_container_width=True, hide_index=True)
+    st.dataframe(empty_table, width='stretch', hide_index=True)
 
     st.divider()
     st.caption(
@@ -67,7 +67,7 @@ def _render_subpage(title: str, subtitle: str) -> None:
     # Shared layout for placeholder subpages until feature-specific UI is added.
     top_left, _ = st.columns([1, 7])
     with top_left:
-        if st.button("Home", use_container_width=True):
+        if st.button("Home", width='stretch'):
             _go_to("home")
 
     st.markdown(f"## {title}")
