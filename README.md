@@ -40,7 +40,9 @@ This application provides a robust solution for tracking and managing IT assets 
 
 ## 🏃‍♂️ Running the Application
 
-*(Add specific command to run your database application here, e.g., `python main.py` or `flask run`)*
+```bash
+streamlit run src/main.py
+```
 
 ## 👥 Team
 * **Team Dumb Ants** - CS 440 Spring 2026
