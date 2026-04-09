@@ -1,0 +1,17 @@
+# Streamlit runtime theme settings.
+#
+# This file is used to define the default color palette and typography for
+# the app so local runs are visually consistent across pages.
+[theme]
+# Use Streamlit dark theme as the base before applying custom colors.
+base = "dark"
+# Accent color used for interactive elements.
+primaryColor = "#22c55e"
+# Main app background color.
+backgroundColor = "#060b08"
+# Secondary surface color for cards/containers.
+secondaryBackgroundColor = "#0d1510"
+# Default text color for readability on dark backgrounds.
+textColor = "#e3f9eb"
+# Theme font family used by Streamlit components.
+font = "sans serif"

@@ -1,0 +1,80 @@
+/*
+    Shared Streamlit UI shell styling.
+    This file defines the visual identity for the screens:
+    banner, content panels, and custom button appearance.
+*/
+
+/* Home hero card (title, summary, and status chip). */
+.hero {
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 0.5rem 0 1.25rem 0;
+    background: linear-gradient(145deg, rgba(15, 23, 18, 0.95), rgba(6, 10, 8, 0.95));
+    box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.08), 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.hero h1 {
+    margin: 0;
+    color: #d7ffe5;
+    letter-spacing: 0.02em;
+    font-weight: 700;
+}
+
+.hero p {
+    margin-top: 0.6rem;
+    color: #9fbdab;
+    font-size: 1.05rem;
+    max-width: 56rem;
+}
+
+/* Small badge used to label app state (proof of concept, status, etc.). */
+.chip {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(34, 197, 94, 0.55);
+    color: #8cffb9;
+    background: rgba(34, 197, 94, 0.08);
+}
+
+/* Reusable content container for subpage placeholders. */
+.panel {
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    border-radius: 14px;
+    padding: 1rem 1rem 1.1rem 1rem;
+    background: rgba(9, 14, 11, 0.9);
+    min-height: 160px;
+}
+
+.panel h3 {
+    margin: 0.1rem 0 0.55rem 0;
+    color: #b7ffd1;
+    font-size: 1.02rem;
+}
+
+.panel p {
+    margin: 0;
+    color: #8ea899;
+    line-height: 1.5;
+}
+
+/* Override Streamlit button styles so navigation matches app branding. */
+div.stButton > button {
+    width: 100%;
+    border: 1px solid rgba(34, 197, 94, 0.45);
+    background: linear-gradient(140deg, rgba(14, 23, 17, 0.95), rgba(8, 14, 10, 0.95));
+    color: #d8ffe7;
+    border-radius: 12px;
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+    font-weight: 600;
+}
+
+div.stButton > button:hover {
+    border-color: rgba(34, 197, 94, 0.8);
+    color: #effff5;
+    background: linear-gradient(140deg, rgba(22, 36, 26, 0.98), rgba(12, 22, 16, 0.98));
+}

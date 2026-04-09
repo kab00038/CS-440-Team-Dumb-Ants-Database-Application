@@ -1,2 +1,6 @@
 .env
 venv
+# Python bytecode/cache (generated every run and not needed in version control)
+__pycache__/
+*.py[cod]
+*$py.class
