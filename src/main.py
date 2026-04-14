@@ -10,7 +10,32 @@ import os
 import dotenv
 import pymysql
 import streamlit as st
+import auth
 from ui_shell import render_shell
+from argon2 import PasswordHasher, exceptions
+from auth import hash_password, verify_password
+
+def create_user(conn, username: str, password: str, is_admin: bool=False):
+    pw_hash = auth.hash_password(password)
+    with conn.cursor() as cursor:
+        cursor.execute(
+            "INSERT INTO users (username, password_hash, is_admin) VALUES (%s, %s, %s)",
+            (username, pw_hash, is_admin),
+        )
+    conn.commit()
+
+def get_user_by_username(conn, username: str):
+    with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+        cursor.execute("SELECT id, username, password_hash, is_admin FROM users WHERE username = %s", (username,))
+        return cursor.fetchone()
+    
+def authenticate_user(conn, username: str, password: str):
+    row = get_user_by_username(conn, username)
+    if not row:
+        return None
+    if auth.verify_password(row["password_hash"], password):
+        return {"id": row["id"], "username": row["username"], "is_admin": bool(row["is_admin"])}
+    return None
 
 
 def run_query(connection, sql, params=None):
@@ -29,7 +54,7 @@ def connect_to_database():
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASS"),
             port=int(os.getenv("DB_PORT", 3306)),
-            database=os.getenv("DB_NAME", "defaultdb"),
+            database=os.getenv("DB_NAME", "assetdatabase"),
             ssl={"ca": "ca.pem"},
         )
         return connection
@@ -43,5 +68,31 @@ def connect_to_database():
 st.set_page_config(page_title="IT Asset Management", layout="wide")
 
     # Render the temporary multi-page shell (home/inventory/analytics/operations).
-render_shell()
+if "user" not in st.session_state:
+    st.session_state["user"] = None
+
+if st.session_state["user"] is None:
+    # Render a centered floating login modal instead of the sidebar form.
+    st.markdown('<div class="login-overlay">', unsafe_allow_html=True)
+    with st.form("login_form"):
+        st.markdown("<h2 style='margin:0 0 0.5rem 0;color:#d7ffe5;'>Log in</h2>", unsafe_allow_html=True)
+        u = st.text_input("Username", key="login_username")
+        p = st.text_input("Password", type="password", key="login_password")
+        submit = st.form_submit_button("Log in")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    if submit:
+        conn = connect_to_database()
+        if conn:
+            user = authenticate_user(conn, u, p)
+            if user:
+                st.session_state["user"] = user
+                st.success(f"Welcome {user['username']}")
+                st.rerun()
+            else:
+                st.error("Invalid credentials")
+        else:
+            st.error("DB connection failed")
+else:
+    render_shell()
 

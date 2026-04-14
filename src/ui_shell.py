@@ -8,6 +8,10 @@ import streamlit as st
 # This file handles lightweight page routing using session state, applies the
 # shared stylesheet, and renders placeholder content for each top-level page.
 
+def _logout() -> None:
+    st.session_state["user"] = None
+    st.session_state["current_page"] = "home"
+    st.rerun()
 
 def _load_stylesheet() -> str:
     # Keep styles in a separate CSS file and inject them at runtime.
@@ -23,6 +27,11 @@ def _go_to(page_name: str) -> None:
 
 def _render_home() -> None:
     # Landing page with project context and navigation buttons.
+    header_col, _ = st.columns([1, 7])
+    with header_col:
+        if st.session_state.get("user") is not None:
+            if st.button("Logout", key="logout_home_btn"):
+                _logout()
     st.markdown(
         """
         <div class="hero">
@@ -69,6 +78,9 @@ def _render_subpage(title: str, subtitle: str) -> None:
     with top_left:
         if st.button("Home", width='stretch'):
             _go_to("home")
+        if st.session_state.get("user") is not None:
+            if st.button("Logout", key="logout_btn"):
+                _logout()
 
     st.markdown(f"## {title}")
     st.markdown(f"<div class=\"panel\"><p>{subtitle}</p></div>", unsafe_allow_html=True)
