@@ -17,17 +17,23 @@ from auth import hash_password, verify_password
 
 def create_user(conn, username: str, password: str, is_admin: bool=False):
     pw_hash = auth.hash_password(password)
-    with conn.cursor() as cursor:
-        cursor.execute(
-            "INSERT INTO users (username, password_hash, is_admin) VALUES (%s, %s, %s)",
-            (username, pw_hash, is_admin),
-        )
-    conn.commit()
+    sql = "INSERT INTO users (username, password_hash, is_admin) VALUES (%s, %s, %s)"
+    try:
+        # run_query will return the lastrowid for non-SELECT statements when commit=True
+        new_id = run_query(conn, sql, (username, pw_hash, is_admin), commit=True)
+        return new_id
+    except Exception as e:
+        st.error("Error creating user")
+        st.write(e)
+        return None
 
 def get_user_by_username(conn, username: str):
-    with conn.cursor(pymysql.cursors.DictCursor) as cursor:
-        cursor.execute("SELECT id, username, password_hash, is_admin FROM users WHERE username = %s", (username,))
-        return cursor.fetchone()
+    rows = run_query(
+        conn,
+        "SELECT id, username, password_hash, is_admin FROM users WHERE username = %s",
+        (username,),
+    )
+    return rows[0] if rows else None
     
 def authenticate_user(conn, username: str, password: str):
     row = get_user_by_username(conn, username)
@@ -38,11 +44,25 @@ def authenticate_user(conn, username: str, password: str):
     return None
 
 
-def run_query(connection, sql, params=None):
-    # Run a SQL query and return rows as dictionaries for easy UI rendering.
+def run_query(connection, sql, params=None, commit: bool=False):
+    """Run a SQL statement.
+
+    - For SELECT queries: returns a list of dict rows (may be empty).
+    - For INSERT/UPDATE/DELETE: if `commit=True` commits the transaction and
+      returns the cursor.lastrowid (or rowcount if lastrowid is not available).
+    """
     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
         cursor.execute(sql, params or ())
-        return cursor.fetchall()
+        if commit:
+            connection.commit()
+        # If the statement returned a result set, fetch and return it.
+        if cursor.description:
+            return cursor.fetchall()
+        # No result set (INSERT/UPDATE/DELETE) — return lastrowid when possible.
+        try:
+            return cursor.lastrowid
+        except Exception:
+            return cursor.rowcount
 
 
 def connect_to_database():
