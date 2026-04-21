@@ -11,9 +11,10 @@ import dotenv
 import pymysql
 import streamlit as st
 import auth
-from ui_shell import render_shell
+import ui_shell
 from argon2 import PasswordHasher, exceptions
 from auth import hash_password, verify_password
+from db import run_query, connect_to_database
 
 def create_user(conn, username: str, password: str, is_admin: bool=False):
     pw_hash = auth.hash_password(password)
@@ -44,44 +45,9 @@ def authenticate_user(conn, username: str, password: str):
     return None
 
 
-def run_query(connection, sql, params=None, commit: bool=False):
-    """Run a SQL statement.
-
-    - For SELECT queries: returns a list of dict rows (may be empty).
-    - For INSERT/UPDATE/DELETE: if `commit=True` commits the transaction and
-      returns the cursor.lastrowid (or rowcount if lastrowid is not available).
-    """
-    with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-        cursor.execute(sql, params or ())
-        if commit:
-            connection.commit()
-        # If the statement returned a result set, fetch and return it.
-        if cursor.description:
-            return cursor.fetchall()
-        # No result set (INSERT/UPDATE/DELETE) — return lastrowid when possible.
-        try:
-            return cursor.lastrowid
-        except Exception:
-            return cursor.rowcount
 
 
-def connect_to_database():
-    # Read .env values and open a secure MySQL connection for later page queries.
-    dotenv.load_dotenv()
-    try:
-        connection = pymysql.connect(
-            host=os.getenv("DB_HOST"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASS"),
-            port=int(os.getenv("DB_PORT", 3306)),
-            database=os.getenv("DB_NAME", "assetdatabase"),
-            ssl={"ca": "ca.pem"},
-        )
-        return connection
-    except Exception as e:
-        st.error("Error connecting to the database:")
-        st.write(e)
-        return None
+# Database helpers moved to src/db.py and imported above to avoid circular imports
 
 
     # Global Streamlit page settings must be configured before rendering content.
@@ -114,5 +80,5 @@ if st.session_state["user"] is None:
         else:
             st.error("DB connection failed")
 else:
-    render_shell()
+    ui_shell.render_shell()
 
