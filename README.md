@@ -40,6 +40,14 @@ This application provides a robust solution for tracking and managing IT assets 
 
 ## 🏃‍♂️ Running the Application
 
+### 🔄 After Pulling New Commits
+
+After pulling new commits, always reinstall dependencies before running the app in case new libraries were added:
+
+```bash
+pip install -r requirements.txt
+```
+
 ```bash
 streamlit run src/main.py
 ```
