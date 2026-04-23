@@ -28,7 +28,7 @@ def render_analytics(go_home_callback: Callable[[], None], logout_callback: Call
     ])
 
     today = date.today()
-    default_start = date(today.year, 1, 1)
+    default_start = date(2024, 1, 1)
     default_end = today
     start_date, end_date = st.date_input("Date range", value=(default_start, default_end))
 
