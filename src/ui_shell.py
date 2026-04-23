@@ -185,11 +185,11 @@ def _render_analytics() -> None:
     if metric != "Maintenance count by type":
         df = df.sort_values('month')
         fig = px.line(df, x='month', y='value', markers=True, labels={'value': metric, 'month': 'Month'})
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
     else:
         df = df.sort_values(['month', 'category'])
         fig = px.bar(df, x='month', y='value', color='category', barmode='group', labels={'value': 'Count', 'month': 'Month'})
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     # Data table + download
     with st.expander("Result data"):
