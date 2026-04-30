@@ -4,6 +4,9 @@ import pandas as pd
 import streamlit as st
 from db import run_query
 
+from analytics import render_analytics
+from crud import render_operations
+
 # UI shell module for the Streamlit proof-of-concept interface.
 #
 # This file handles lightweight page routing using session state, applies the
@@ -103,6 +106,20 @@ def _render_subpage(title: str, subtitle: str) -> None:
     st.info("No database queries are enabled on this page yet.")
 
 
+def _render_analytics() -> None:
+    render_analytics(
+        go_home_callback=lambda: _go_to("home"),
+        logout_callback=_logout,
+    )
+
+
+def _render_operations() -> None:
+    render_operations(
+        go_home_callback=lambda: _go_to("home"),
+        logout_callback=_logout,
+    )
+
+
 def render_shell() -> None:
     # Main router for the shell: apply CSS, initialize page state, render view.
     st.markdown(f"<style>{_load_stylesheet()}</style>", unsafe_allow_html=True)
@@ -116,8 +133,8 @@ def render_shell() -> None:
     if page == "inventory":
         _render_subpage("Inventory", "Inventory page placeholder. Device lists and filters will be added here.")
     elif page == "analytics":
-        _render_subpage("Analytics", "Analytics page placeholder. Charts and comparisons will be added here.")
+        _render_analytics()
     elif page == "operations":
-        _render_subpage("Operations", "Operations page placeholder. Create/update/delete workflows will be added here.")
+        _render_operations()
     else:
         _render_home()

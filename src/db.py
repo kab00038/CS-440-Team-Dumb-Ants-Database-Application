@@ -1,5 +1,8 @@
+import os
+import dotenv
 import pymysql
 import pymysql.cursors
+import streamlit as st
 
 
 def run_query(connection, sql, params=None, commit: bool = False):
@@ -19,3 +22,24 @@ def run_query(connection, sql, params=None, commit: bool = False):
             return cursor.lastrowid
         except Exception:
             return cursor.rowcount
+
+
+def connect_to_database():
+    dotenv.load_dotenv()
+    try:
+        connection = pymysql.connect(
+            host=os.getenv("DB_HOST"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASS"),
+            port=int(os.getenv("DB_PORT", 3306)),
+            database=os.getenv("DB_NAME", "assetdatabase"),
+            ssl={"ca": "ca.pem"},
+        )
+        return connection
+    except Exception as e:
+        try:
+            st.error("Error connecting to the database:")
+            st.write(e)
+        except Exception:
+            pass
+        return None

@@ -11,10 +11,10 @@ import dotenv
 import pymysql
 import streamlit as st
 import auth
-from db import run_query
 from ui_shell import render_shell
 from argon2 import PasswordHasher, exceptions
 from auth import hash_password, verify_password
+from db import run_query, connect_to_database
 
 def create_user(conn, username: str, password: str, is_admin: bool=False):
     pw_hash = auth.hash_password(password)
@@ -45,24 +45,6 @@ def authenticate_user(conn, username: str, password: str):
     return None
 
 
-
-def connect_to_database():
-    # Read .env values and open a secure MySQL connection for later page queries.
-    dotenv.load_dotenv()
-    try:
-        connection = pymysql.connect(
-            host=os.getenv("DB_HOST"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASS"),
-            port=int(os.getenv("DB_PORT", 3306)),
-            database=os.getenv("DB_NAME", "assetdatabase"),
-            ssl={"ca": "ca.pem"},
-        )
-        return connection
-    except Exception as e:
-        st.error("Error connecting to the database:")
-        st.write(e)
-        return None
 
 
     # Global Streamlit page settings must be configured before rendering content.
