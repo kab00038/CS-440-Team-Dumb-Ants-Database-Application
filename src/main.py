@@ -11,6 +11,7 @@ import dotenv
 import pymysql
 import streamlit as st
 import auth
+from db import run_query
 from ui_shell import render_shell
 from argon2 import PasswordHasher, exceptions
 from auth import hash_password, verify_password
@@ -43,26 +44,6 @@ def authenticate_user(conn, username: str, password: str):
         return {"id": row["id"], "username": row["username"], "is_admin": bool(row["is_admin"])}
     return None
 
-
-def run_query(connection, sql, params=None, commit: bool=False):
-    """Run a SQL statement.
-
-    - For SELECT queries: returns a list of dict rows (may be empty).
-    - For INSERT/UPDATE/DELETE: if `commit=True` commits the transaction and
-      returns the cursor.lastrowid (or rowcount if lastrowid is not available).
-    """
-    with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-        cursor.execute(sql, params or ())
-        if commit:
-            connection.commit()
-        # If the statement returned a result set, fetch and return it.
-        if cursor.description:
-            return cursor.fetchall()
-        # No result set (INSERT/UPDATE/DELETE) — return lastrowid when possible.
-        try:
-            return cursor.lastrowid
-        except Exception:
-            return cursor.rowcount
 
 
 def connect_to_database():
@@ -107,6 +88,7 @@ if st.session_state["user"] is None:
             user = authenticate_user(conn, u, p)
             if user:
                 st.session_state["user"] = user
+                st.session_state["conn"] = conn
                 st.success(f"Welcome {user['username']}")
                 st.rerun()
             else:
