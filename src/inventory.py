@@ -1,6 +1,8 @@
 import pandas as pd
 import streamlit as st
 
+from db import run_query
+
 def render_inventory(go_home_callback=None, logout_callback=None):
     top_left, _ = st.columns([1, 7])
 
@@ -15,16 +17,9 @@ def render_inventory(go_home_callback=None, logout_callback=None):
                     logout_callback()
 
     st.markdown("## Inventory")
-    st.markdown(
-        """
-        <div class="panel">
-            <p>
-                A log of all devices in the system. Displays asset ID, IP address,
-                online status, location ID, form factor, and assigned user when applicable.
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    st.caption(
+        "A log of all devices in the system. Displays asset ID, IP address, online status, "
+        "location ID, form factor, and assigned user when applicable."
     )
 
     conn = st.session_state.get("conn")
@@ -47,6 +42,17 @@ def render_inventory(go_home_callback=None, logout_callback=None):
         ORDER BY ma.asset_id;
     """
 
-    inventory_df = pd.read_sql(query, conn)
+    rows = run_query(conn, query)
+    inventory_df = pd.DataFrame(
+        rows,
+        columns=[
+            "asset_id",
+            "ip_address",
+            "online_status",
+            "location_id",
+            "form_factor",
+            "assigned_user",
+        ],
+    )
 
-    st.dataframe(inventory_df, use_container_width=True)
+    st.dataframe(inventory_df, width="stretch", height=520)

@@ -1,12 +1,12 @@
 from pathlib import Path
 
-import pandas as pd
 import streamlit as st
 
 from db import run_query
 from inventory import render_inventory
 from analytics import render_analytics
 from crud import render_operations
+from active import render_active_devices
 
 # UI shell module for the Streamlit proof-of-concept interface.
 #
@@ -42,9 +42,10 @@ def _render_home() -> None:
         <div class="hero">
             <h1>🖥️ IT Asset Management</h1>
             <p>
-                UI shell for IT asset management application. This is an interface built with Streamlit,  designed layout and styling for inventory management, analytics, and operations workflows.
+                Database-backed IT asset management application built with Streamlit, providing live inventory, analytics, and operations workflows.
             </p>
-            <span class="chip">User Interface Only</span>
+            <span class="chip">Full Functionality Implemented</span>
+            <span class="chip">Live Data Connected</span>
         </div>
         """,
         unsafe_allow_html=True,
@@ -64,31 +65,11 @@ def _render_home() -> None:
 
     st.markdown("### Active Devices")
 
-    conn = st.session_state.get("conn")
-    if conn:
-        sql = """
-            SELECT ma.asset_id, ma.hostname, ma.location_id, ma.ip_address, 'Server' AS device_type
-            FROM managed_assets ma JOIN server s ON ma.asset_id = s.asset_id
-            WHERE ma.online_status = 1
-            UNION ALL
-            SELECT ma.asset_id, ma.hostname, ma.location_id, ma.ip_address, 'Workstation' AS device_type
-            FROM managed_assets ma JOIN workstation w ON ma.asset_id = w.asset_id
-            WHERE ma.online_status = 1
-            UNION ALL
-            SELECT ma.asset_id, ma.hostname, ma.location_id, ma.ip_address, nd.device_type
-            FROM managed_assets ma JOIN network_device nd ON ma.asset_id = nd.asset_id
-            WHERE ma.online_status = 1
-        """
-        rows = run_query(conn, sql)
-        df = pd.DataFrame(rows, columns=["asset_id", "hostname", "location_id", "ip_address", "device_type"])
-        df.columns = ["Asset ID", "Hostname", "Location ID", "IP Address", "Device Type"]
-        st.dataframe(df, width='stretch', hide_index=True)
-    else:
-        st.caption("Assets will appear here once logged in.")
+    render_active_devices()
 
     st.divider()
     st.caption(
-        "Status: Styled UI is active. Database connection helpers are loaded; no queries run on page load."
+        "Status: Active. Displaying online assets from database. Analytics, Operations, and Inventory pages available."
     )
 
 
