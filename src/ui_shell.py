@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 from db import run_query
-
+from inventory import render_inventory
 from analytics import render_analytics
 from crud import render_operations
 
@@ -131,7 +131,7 @@ def render_shell() -> None:
     page = st.session_state["current_page"]
 
     if page == "inventory":
-        _render_subpage("Inventory", "Inventory page placeholder. Device lists and filters will be added here.")
+        _render_inventory()
     elif page == "analytics":
         _render_analytics()
     elif page == "operations":
