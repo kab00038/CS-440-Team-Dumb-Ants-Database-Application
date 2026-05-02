@@ -44,7 +44,6 @@ def _render_home() -> None:
             <p>
                 Database-backed IT asset management application built with Streamlit, providing live inventory, analytics, and operations workflows.
             </p>
-            <span class="chip">Full Functionality Implemented</span>
             <span class="chip">Live Data Connected</span>
         </div>
         """,

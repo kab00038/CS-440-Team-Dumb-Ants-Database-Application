@@ -12,7 +12,7 @@ This application provides a robust solution for tracking and managing IT assets 
 * **Database:** MySQL
 * **Database Hosting:** [Aiven](https://aiven.io/) (Fully managed cloud database hosting)
 
-## ⚙️ Setup & Installation
+## ⚙️ Setup & Installation (If you have downloaded this repository as a zip file, unzip and skip to step 2)
 
 1. **Clone the repository:**
    ```bash
