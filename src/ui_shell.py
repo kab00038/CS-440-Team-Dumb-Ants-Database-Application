@@ -41,14 +41,11 @@ def _render_home() -> None:
         """
         <div class="hero">
             <h1>🖥️ IT Asset Management</h1>
-<<<<<<< HEAD
             <p>
                 Database-backed IT asset management application built with Streamlit, providing live inventory, analytics, and operations workflows.
             </p>
             <span class="chip">Full Functionality Implemented</span>
             <span class="chip">Live Data Connected</span>
-=======
->>>>>>> d83036aee12012982fcf79daaa146b9ac4dd514a
         </div>
         """,
         unsafe_allow_html=True,
@@ -69,15 +66,10 @@ def _render_home() -> None:
     st.markdown("### Active Devices")
 
     render_active_devices()
-
-<<<<<<< HEAD
     st.divider()
     st.caption(
         "Status: Active. Displaying online assets from database. Analytics, Operations, and Inventory pages available."
     )
-
-=======
->>>>>>> d83036aee12012982fcf79daaa146b9ac4dd514a
 
 def _render_subpage(title: str, subtitle: str) -> None:
     # Shared layout for placeholder subpages until feature-specific UI is added.
