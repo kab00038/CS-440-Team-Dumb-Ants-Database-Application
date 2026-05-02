@@ -41,10 +41,6 @@ def _render_home() -> None:
         """
         <div class="hero">
             <h1>🖥️ IT Asset Management</h1>
-            <p>
-                UI shell for IT asset management application. This is an interface built with Streamlit,  designed layout and styling for inventory management, analytics, and operations workflows.
-            </p>
-            <span class="chip">User Interface Only</span>
         </div>
         """,
         unsafe_allow_html=True,
@@ -86,11 +82,6 @@ def _render_home() -> None:
     else:
         st.caption("Assets will appear here once logged in.")
 
-    st.divider()
-    st.caption(
-        "Status: Styled UI is active. Database connection helpers are loaded; no queries run on page load."
-    )
-
 
 def _render_subpage(title: str, subtitle: str) -> None:
     # Shared layout for placeholder subpages until feature-specific UI is added.
@@ -104,7 +95,6 @@ def _render_subpage(title: str, subtitle: str) -> None:
 
     st.markdown(f"## {title}")
     st.markdown(f"<div class=\"panel\"><p>{subtitle}</p></div>", unsafe_allow_html=True)
-    st.info("No database queries are enabled on this page yet.")
 
 def _render_inventory() -> None:
     render_inventory(

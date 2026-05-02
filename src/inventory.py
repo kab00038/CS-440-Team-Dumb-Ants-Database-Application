@@ -49,4 +49,4 @@ def render_inventory(go_home_callback=None, logout_callback=None):
 
     inventory_df = pd.read_sql(query, conn)
 
-    st.dataframe(inventory_df, use_container_width=True)
+    st.dataframe(inventory_df, width='stretch')
