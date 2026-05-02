@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
 
-
 def render_inventory(go_home_callback=None, logout_callback=None):
     top_left, _ = st.columns([1, 7])
 
