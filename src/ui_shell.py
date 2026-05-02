@@ -105,6 +105,11 @@ def _render_subpage(title: str, subtitle: str) -> None:
     st.markdown(f"<div class=\"panel\"><p>{subtitle}</p></div>", unsafe_allow_html=True)
     st.info("No database queries are enabled on this page yet.")
 
+def _render_inventory() -> None:
+    render_inventory(
+        go_home_callback=lambda: _go_to("home"),
+        logout_callback=_logout,
+    )
 
 def _render_analytics() -> None:
     render_analytics(
