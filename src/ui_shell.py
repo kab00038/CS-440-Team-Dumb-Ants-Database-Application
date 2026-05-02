@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+
 from db import run_query
 from inventory import render_inventory
 from analytics import render_analytics
@@ -110,6 +111,7 @@ def _render_inventory() -> None:
         go_home_callback=lambda: _go_to("home"),
         logout_callback=_logout,
     )
+
 
 def _render_analytics() -> None:
     render_analytics(

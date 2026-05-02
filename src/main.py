@@ -45,8 +45,6 @@ def authenticate_user(conn, username: str, password: str):
     return None
 
 
-
-
     # Global Streamlit page settings must be configured before rendering content.
 st.set_page_config(page_title="IT Asset Management", layout="wide")
 
@@ -79,4 +77,3 @@ if st.session_state["user"] is None:
             st.error("DB connection failed")
 else:
     render_shell()
-
