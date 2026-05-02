@@ -55,4 +55,8 @@ def render_inventory(go_home_callback=None, logout_callback=None):
         ],
     )
 
+<<<<<<< HEAD
     st.dataframe(inventory_df, width="stretch", height=520)
+=======
+    st.dataframe(inventory_df, width='stretch')
+>>>>>>> d83036aee12012982fcf79daaa146b9ac4dd514a
